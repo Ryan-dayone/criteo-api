@@ -8,7 +8,7 @@ Retail Media Partner API
 TODO
 
 ```bash
-TODO
+pip install git+https://github.com/Ryan-dayone/criteo-api
 ```
 
 ## Usage
