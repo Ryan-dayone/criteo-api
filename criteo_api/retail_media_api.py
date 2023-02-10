@@ -15,7 +15,7 @@ import json
 import requests
 from time import sleep
 from os import environ as env
-from src import auth
+from criteo_api import auth
 
 
 def get_all_accounts() -> json:

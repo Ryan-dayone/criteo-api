@@ -14,8 +14,8 @@ TODO
 ## Usage
 
 ```python
-from src import auth
-from src import retail_media_api as rmapi
+from criteo_api import auth
+from criteo_api import retail_media_api as rmapi
 import json
 
 # application credentials (downloaded .txt file from app portal in dev account)
