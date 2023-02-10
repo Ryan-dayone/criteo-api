@@ -25,5 +25,5 @@ setuptools.setup(
     url='https://github.com/Ryan-dayone/criteo-api',
     license='MIT',
     packages=['criteo_api'],
-    install_requires=['requests', 'json', 'os', 'pandas', 'time'],
+    install_requires=['requests', 'pandas'],
 )
