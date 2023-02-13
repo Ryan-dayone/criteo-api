@@ -3,9 +3,9 @@ classes to connect to criteo retail media api; auth.get_token() must be called i
 Author: Ryan Morlando
 Created:1/3/2023
 Updated:
-V1.0.0
+V1.0.1
 Patch Notes:
-
+-Updated to newest stable version 2023-01
 To Do:
 Add line items in
 Handle more api responses
@@ -23,7 +23,7 @@ def get_all_accounts() -> json:
     Gets all the accounts associated with the credentials used to grab the api token
     :return: json with data
     """
-    url = f'https://api.criteo.com/2022-10/retail-media/accounts'
+    url = f'https://api.criteo.com/2023-01/retail-media/accounts'
 
     payload = {}
 
@@ -52,7 +52,7 @@ def get_all_brands(account_id: str) -> json:
     :param account_id: account ids can be found by calling get_all_accounts() or in the retail media portal account
     :return:
     """
-    url = f'https://api.criteo.com/2022-10/retail-media/accounts/{account_id}/brands'
+    url = f'https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/brands'
 
     payload = {}
     headers = {
@@ -81,7 +81,7 @@ def get_all_line_items(account_id: str) -> json:
     :param account_id: account ids can be found by calling get_all_accounts() or in the retail media portal account
     :return: json object
     """
-    url = f'https://api.criteo.com/2022-10/retail-media/accounts/{account_id}/line-items'
+    url = f'https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/line-items'
 
     payload = {}
     headers = {
@@ -110,7 +110,7 @@ def get_all_campaign_ids(account_id: str) -> list:
     :param account_id: account ids can be found by calling get_all_accounts() or in the retail media portal account
     :return: list
     """
-    url = f"https://api.criteo.com/2022-10/retail-media/accounts/{account_id}/campaigns"
+    url = f"https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/campaigns"
 
     payload = {}
     headers = {
@@ -141,7 +141,7 @@ def get_all_campaigns(account_id: str) -> json:
     :param account_id: account ids can be found by calling get_all_accounts() or in the retail media portal account
     :return: json response
     """
-    url = f"https://api.criteo.com/2022-10/retail-media/accounts/{account_id}/campaigns"
+    url = f"https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/campaigns"
 
     payload = {}
     headers = {
@@ -177,7 +177,7 @@ def request_campaign_report(campaigns: list | str, report_type: str, start_date:
     <= click_attr_window; Must be specified if click_attr_window is used
     :return: json object
     """
-    url = "https://api.criteo.com/2022-10/retail-media/reports/campaigns"
+    url = "https://api.criteo.com/2023-01/retail-media/reports/campaigns"
 
     if type(campaigns) is list:
         attributes = {"ids": campaigns}
@@ -240,7 +240,7 @@ def is_generated(report_id: str):
     :param report_id: report id
     :return:
     """
-    url = f"https://api.criteo.com/2022-04/retail-media/reports/{report_id}/status"
+    url = f"https://api.criteo.com/2023-01/retail-media/reports/{report_id}/status"
     headers = {
         'Authorization': f'Bearer {env.get("criteo_access_token")}'
     }
@@ -274,7 +274,7 @@ def download_report(report_id: str) -> pd.DataFrame():
     :param report_id: report id
     :return: dataframe of report
     """
-    url = f"https://api.criteo.com/2022-04/retail-media/reports/{report_id}/output"
+    url = f"https://api.criteo.com/2023-01/retail-media/reports/{report_id}/output"
     headers = {
         'Authorization': f'Bearer {env.get("criteo_access_token")}'
     }

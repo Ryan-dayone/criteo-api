@@ -16,7 +16,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='criteo-api',
-    version='1.0.0',
+    version='1.0.1',
     author='Ryan Morlando',
     author_email='ryan@dayonedigital.com',
     description='Criteo API access',
