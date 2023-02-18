@@ -52,7 +52,7 @@ def get_all_brands(account_id: str) -> json:
     :param account_id: account ids can be found by calling get_all_accounts() or in the retail media portal account
     :return:
     """
-    url = f'https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/brands'
+    url = f'https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/brands?pageSize=50'
 
     payload = {}
     headers = {
@@ -81,7 +81,7 @@ def get_all_line_items(account_id: str) -> json:
     :param account_id: account ids can be found by calling get_all_accounts() or in the retail media portal account
     :return: json object
     """
-    url = f'https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/line-items'
+    url = f'https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/line-items?pageSize=50'
 
     payload = {}
     headers = {
@@ -110,7 +110,7 @@ def get_all_campaign_ids(account_id: str) -> list:
     :param account_id: account ids can be found by calling get_all_accounts() or in the retail media portal account
     :return: list
     """
-    url = f"https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/campaigns"
+    url = f"https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/campaigns?pageSize=50"
 
     payload = {}
     headers = {
@@ -141,7 +141,7 @@ def get_all_campaigns(account_id: str) -> json:
     :param account_id: account ids can be found by calling get_all_accounts() or in the retail media portal account
     :return: json response
     """
-    url = f"https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/campaigns"
+    url = f"https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/campaigns?pageSize=50"
 
     payload = {}
     headers = {
