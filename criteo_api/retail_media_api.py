@@ -63,7 +63,6 @@ def get_all_brands(account_id: str) -> json:
     response = requests.request("GET", url, headers=headers, data=payload)
 
     if response.status_code == 200:
-        print(f'Get all brands request successful')
         # convert the response to a dataframe
         return json.loads(response.text)
 
@@ -92,7 +91,6 @@ def get_all_line_items(account_id: str) -> json:
     response = requests.request("GET", url, headers=headers, data=payload)
 
     if response.status_code == 200:
-        print(f'Get all brands request successful')
         # convert the response to a dataframe
         return json.loads(response.text)
 
@@ -100,6 +98,34 @@ def get_all_line_items(account_id: str) -> json:
         print('Refreshing Token')
         auth.refresh_token()
         return get_all_line_items(account_id=account_id)
+    else:
+        exit(f'{response.text}')
+
+
+def get_line_item_products(line_item_id: str) -> json:
+    """
+    gets all the products for a specific line item group
+    :param line_item_id: id for a line item group
+    :return: json object
+    """
+    url = f'https://api.criteo.com/2023-01/retail-media/line-items/{line_item_id}/products?pageSize=50'
+
+    payload = {}
+    headers = {
+        'Accept': 'application/json',
+        'Authorization': f'Bearer {env.get("criteo_access_token")}'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    if response.status_code == 200:
+        # convert the response to a dataframe
+        return json.loads(response.text)
+
+    elif response.status_code == 401:
+        print('Refreshing Token')
+        auth.refresh_token()
+        return get_line_item_products(line_item_id=line_item_id)
     else:
         exit(f'{response.text}')
 
@@ -121,7 +147,6 @@ def get_all_campaign_ids(account_id: str) -> list:
     response = requests.request("GET", url, headers=headers, data=payload)
 
     if response.status_code == 200:
-        print(f'Get all campaign ids request successful')
         # convert the response to a dataframe
         campaigns = pd.DataFrame(json.loads(response.text)['data'])
 
@@ -152,7 +177,6 @@ def get_all_campaigns(account_id: str) -> json:
     response = requests.request("GET", url, headers=headers, data=payload)
 
     if response.status_code == 200:
-        print(f'Get all campaigns request successful')
         return json.loads(response.text)
 
     elif response.status_code == 401:
@@ -281,7 +305,7 @@ def download_report(report_id: str) -> pd.DataFrame():
     response = requests.request("GET", url, headers=headers)
 
     if response.status_code == 200:
-        print("FIle download successful")
+        print("File download successful")
         return pd.DataFrame(json.loads(response.text))
 
     elif response.status_code == 401:
@@ -305,7 +329,7 @@ def paginate(url: str) -> json:
     response = requests.request("GET", url, headers=headers)
 
     if response.status_code == 200:
-        print("File download successful")
+        print("Moved to next page")
         return json.loads(response.text)
 
     elif response.status_code == 401:
