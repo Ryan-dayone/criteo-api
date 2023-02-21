@@ -74,6 +74,34 @@ def get_all_brands(account_id: str) -> json:
         exit(f'{response.text}')
 
 
+def get_all_retailers(account_id: str) -> json:
+    """
+    Gets all the retialers for a specific account
+    :param account_id: account ids can be found by calling get_all_accounts() or in the retail media portal account
+    :return: json object
+    """
+    url = f'https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/retailers?pageSize=50'
+
+    payload = {}
+    headers = {
+        'Accept': 'application/json',
+        'Authorization': f'Bearer {env.get("criteo_access_token")}'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    if response.status_code == 200:
+        # return response
+        return json.loads(response.text)
+
+    elif response.status_code == 401:
+        print('Refreshing Token')
+        auth.refresh_token()
+        return get_all_retailers(account_id=account_id)
+    else:
+        exit(f'{response.text}')
+
+
 def get_all_line_items(account_id: str) -> json:
     """
     Gets all the line items for a specific account
@@ -91,7 +119,7 @@ def get_all_line_items(account_id: str) -> json:
     response = requests.request("GET", url, headers=headers, data=payload)
 
     if response.status_code == 200:
-        # convert the response to a dataframe
+        # return reponse
         return json.loads(response.text)
 
     elif response.status_code == 401:
