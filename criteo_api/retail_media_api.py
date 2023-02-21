@@ -188,10 +188,84 @@ def get_all_campaigns(account_id: str) -> json:
         exit(f'{response.text}')
 
 
+def request_report(endpoint: str, ids: list | str, report_type: str, start_date: str, end_date: str,
+                   click_attr_window: str = None, view_attr_window: str = None) -> json:
+    """
+    Requests a line item report based on all the parameters and returns the response
+    :param endpoint: str: 'line-items' or 'campaigns'
+    :param ids: list of ids or a single id str. Either campaign or line item ids depending on endpoint
+    :param report_type: one of (summary, pageType, keyword, productCategory, product, attributedTransactions)
+    :param start_date: report start date
+    :param end_date: report end date
+    :param click_attr_window: click attribution window. One of (1D, 14D, 30D). Defaults to campaign value if None;
+    Must be specified if click_attr_window is used
+    :param view_attr_window: view attribution window. One of (none, 1D, 14D, 30D). Defaults to campaign value if None;
+    Must be <= click_attr_window; Must be specified if click_attr_window is used
+    :return: json object
+    """
+    if endpoint != 'line-items' and endpoint != 'campaigns':
+        exit('invalid endpoint. Must be one of line-items or campaigns')
+
+    url = f"https://api.criteo.com/2023-01/retail-media/reports/{endpoint}"
+
+    if type(ids) is list:
+        attributes = {"ids": ids}
+
+    else:
+        attributes = {"id": f"{ids}"}
+
+    attributes['reportType'] = report_type
+    attributes['startDate'] = start_date
+    attributes['endDate'] = end_date
+    attributes['timeZone'] = "America/New_York"
+
+    if click_attr_window is not None:
+        attributes['clickAttributionWindow'] = click_attr_window
+
+        if view_attr_window is None:
+            exit('Can not use click attribution window without specifying view attribution window')
+        else:
+            attributes['viewAttributionWindow'] = view_attr_window
+
+    else:
+        if view_attr_window is not None:
+            exit('Can not use view attribution window without specifying click attribution window')
+
+    attributes['format'] = "json"
+
+    payload = json.dumps({
+        "data": {
+            "type": "RetailMediaReportRequest",
+            "attributes": attributes
+        }
+    })
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': f'Bearer {env.get("criteo_access_token")}'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    if response.status_code == 200:
+        print(f'{endpoint}/{report_type} report request successful')
+        return json.loads(response.text)
+
+    elif response.status_code == 401:
+        print('Refreshing Token')
+        auth.refresh_token()
+        return request_report(endpoint=endpoint, ids=ids, report_type=report_type, start_date=start_date,
+                              end_date=end_date, click_attr_window=click_attr_window, view_attr_window=view_attr_window)
+
+    else:
+        exit(f'{response.text}')
+
+
 def request_campaign_report(campaigns: list | str, report_type: str, start_date: str, end_date: str,
                             click_attr_window: str = None, view_attr_window: str = None) -> json:
     """
-    Requests a campaign report based on all the parameters and returns the response
+    Requests a line item report based on all the parameters and returns the response
     :param campaigns: list of campaign ids or a str for single campaign
     :param report_type: one of (summary, pageType, keyword, productCategory, product, attributedTransactions)
     :param start_date: report start date
