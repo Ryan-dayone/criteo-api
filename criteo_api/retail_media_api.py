@@ -1,5 +1,5 @@
 """
-classes to connect to criteo retail media api; auth.get_token() must be called in your driver class
+functions to connect to criteo retail media api; auth.get_token() must be called in your driver class
 Author: Ryan Morlando
 Created:1/3/2023
 Updated:
