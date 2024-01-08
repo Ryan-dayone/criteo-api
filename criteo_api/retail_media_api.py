@@ -217,8 +217,8 @@ def get_all_campaigns(account_id: str) -> json:
 
 
 def request_report(endpoint: str, ids: list | str, report_type: str, start_date: str, end_date: str,
-                   metrics: list, dimensions: list, sales_chanel: str,
-                   click_attr_window: str = None, view_attr_window: str = None) -> json:
+                   click_attr_window: str = None, view_attr_window: str = None,
+                   metrics: list = None, dimensions: list = None, sales_chanel: str = None,) -> json:
     """
     Requests a line item report based on all the parameters and returns the response
     :param endpoint: str: 'line-items' or 'campaigns'
@@ -250,10 +250,13 @@ def request_report(endpoint: str, ids: list | str, report_type: str, start_date:
     attributes['startDate'] = start_date
     attributes['endDate'] = end_date
     attributes['timeZone'] = "America/New_York"
-    attributes['metrics'] = metrics
-    attributes['dimensions'] = dimensions
     attributes['campaignType'] = 'sponsoredProducts'
-    attributes['salesChannel'] = sales_chanel
+    if metrics:
+        attributes['metrics'] = metrics
+    if dimensions:
+        attributes['dimensions'] = dimensions
+    if sales_chanel:
+        attributes['salesChannel'] = sales_chanel
 
     if click_attr_window is not None:
         attributes['clickAttributionWindow'] = click_attr_window
