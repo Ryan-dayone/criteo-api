@@ -23,7 +23,7 @@ def get_all_accounts() -> json:
     Gets all the accounts associated with the credentials used to grab the api token
     :return: json with data
     """
-    url = f'https://api.criteo.com/2023-01/retail-media/accounts'
+    url = f'https://api.criteo.com/2023-04/retail-media/accounts'
 
     payload = {}
 
@@ -52,7 +52,7 @@ def get_all_brands(account_id: str) -> json:
     :param account_id: account ids can be found by calling get_all_accounts() or in the retail media portal account
     :return:
     """
-    url = f'https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/brands?pageSize=50'
+    url = f'https://api.criteo.com/2023-07/retail-media/accounts/{account_id}/brands?pageSize=50'
 
     payload = {}
     headers = {
@@ -80,7 +80,7 @@ def get_all_retailers(account_id: str) -> json:
     :param account_id: account ids can be found by calling get_all_accounts() or in the retail media portal account
     :return: json object
     """
-    url = f'https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/retailers?pageSize=50'
+    url = f'https://api.criteo.com/2023-07/retail-media/accounts/{account_id}/retailers?pageSize=50'
 
     payload = {}
     headers = {
@@ -217,6 +217,7 @@ def get_all_campaigns(account_id: str) -> json:
 
 
 def request_report(endpoint: str, ids: list | str, report_type: str, start_date: str, end_date: str,
+                   metrics: list, dimensions: list, sales_chanel: str,
                    click_attr_window: str = None, view_attr_window: str = None) -> json:
     """
     Requests a line item report based on all the parameters and returns the response
@@ -225,6 +226,9 @@ def request_report(endpoint: str, ids: list | str, report_type: str, start_date:
     :param report_type: one of (summary, pageType, keyword, productCategory, product, attributedTransactions)
     :param start_date: report start date
     :param end_date: report end date
+    :param metrics: List of metrics to have in the requested report
+    :param dimensions: List of dimensions to have in the requested report
+    :param sales_chanel: One of (offline, online)
     :param click_attr_window: click attribution window. One of (1D, 14D, 30D). Defaults to campaign value if None;
     Must be specified if click_attr_window is used
     :param view_attr_window: view attribution window. One of (none, 1D, 14D, 30D). Defaults to campaign value if None;
@@ -234,7 +238,7 @@ def request_report(endpoint: str, ids: list | str, report_type: str, start_date:
     if endpoint != 'line-items' and endpoint != 'campaigns':
         exit('invalid endpoint. Must be one of line-items or campaigns')
 
-    url = f"https://api.criteo.com/2023-01/retail-media/reports/{endpoint}"
+    url = f"https://api.criteo.com/2023-07/retail-media/reports/{endpoint}"
 
     if type(ids) is list:
         attributes = {"ids": ids}
@@ -246,6 +250,10 @@ def request_report(endpoint: str, ids: list | str, report_type: str, start_date:
     attributes['startDate'] = start_date
     attributes['endDate'] = end_date
     attributes['timeZone'] = "America/New_York"
+    attributes['metrics'] = metrics
+    attributes['dimensions'] = dimensions
+    attributes['campaignType'] = 'sponsoredProducts'
+    attributes['salesChannel'] = sales_chanel
 
     if click_attr_window is not None:
         attributes['clickAttributionWindow'] = click_attr_window
@@ -296,8 +304,9 @@ def is_generated(report_id: str):
     :param report_id: report id
     :return:
     """
-    url = f"https://api.criteo.com/2023-01/retail-media/reports/{report_id}/status"
+    url = f"https://api.criteo.com/2023-07/retail-media/reports/{report_id}/status"
     headers = {
+        'Accept': 'application/json',
         'Authorization': f'Bearer {env.get("criteo_access_token")}'
     }
 
@@ -330,8 +339,9 @@ def download_report(report_id: str) -> pd.DataFrame():
     :param report_id: report id
     :return: dataframe of report
     """
-    url = f"https://api.criteo.com/2023-01/retail-media/reports/{report_id}/output"
+    url = f"https://api.criteo.com/2023-07/retail-media/reports/{report_id}/output"
     headers = {
+        'Accept': 'application/octet-stream',
         'Authorization': f'Bearer {env.get("criteo_access_token")}'
     }
     response = requests.request("GET", url, headers=headers)
