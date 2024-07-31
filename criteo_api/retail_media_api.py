@@ -5,7 +5,7 @@ Created:1/3/2023
 Updated:
 V1.0.1
 Patch Notes:
--Updated to newest stable version 2023-01
+-Updated to newest stable version 2024-01
 To Do:
 Add line items in
 Handle more api responses
@@ -23,7 +23,7 @@ def get_all_accounts() -> json:
     Gets all the accounts associated with the credentials used to grab the api token
     :return: json with data
     """
-    url = f'https://api.criteo.com/2023-04/retail-media/accounts'
+    url = f'https://api.criteo.com/2024-01/retail-media/accounts'
 
     payload = {}
 
@@ -52,7 +52,7 @@ def get_all_brands(account_id: str) -> json:
     :param account_id: account ids can be found by calling get_all_accounts() or in the retail media portal account
     :return:
     """
-    url = f'https://api.criteo.com/2023-07/retail-media/accounts/{account_id}/brands?pageSize=50'
+    url = f'https://api.criteo.com/2024-01/retail-media/accounts/{account_id}/brands?pageSize=50'
 
     payload = {}
     headers = {
@@ -80,7 +80,7 @@ def get_all_retailers(account_id: str) -> json:
     :param account_id: account ids can be found by calling get_all_accounts() or in the retail media portal account
     :return: json object
     """
-    url = f'https://api.criteo.com/2023-07/retail-media/accounts/{account_id}/retailers?pageSize=50'
+    url = f'https://api.criteo.com/2024-01/retail-media/accounts/{account_id}/retailers?pageSize=50'
 
     payload = {}
     headers = {
@@ -108,7 +108,7 @@ def get_all_line_items(account_id: str) -> json:
     :param account_id: account ids can be found by calling get_all_accounts() or in the retail media portal account
     :return: json object
     """
-    url = f'https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/line-items?pageSize=50'
+    url = f'https://api.criteo.com/2024-01/retail-media/accounts/{account_id}/line-items?pageSize=50'
 
     payload = {}
     headers = {
@@ -136,7 +136,7 @@ def get_line_item_products(line_item_id: str) -> json:
     :param line_item_id: id for a line item group
     :return: json object
     """
-    url = f'https://api.criteo.com/2023-01/retail-media/line-items/{line_item_id}/products?pageSize=50'
+    url = f'https://api.criteo.com/2024-01/retail-media/line-items/{line_item_id}/products?pageSize=50'
 
     payload = {}
     headers = {
@@ -164,7 +164,7 @@ def get_all_campaign_ids(account_id: str) -> list:
     :param account_id: account ids can be found by calling get_all_accounts() or in the retail media portal account
     :return: list
     """
-    url = f"https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/campaigns?pageSize=50"
+    url = f"https://api.criteo.com/2024-01/retail-media/accounts/{account_id}/campaigns?pageSize=50"
 
     payload = {}
     headers = {
@@ -194,7 +194,7 @@ def get_all_campaigns(account_id: str) -> json:
     :param account_id: account ids can be found by calling get_all_accounts() or in the retail media portal account
     :return: json response
     """
-    url = f"https://api.criteo.com/2023-01/retail-media/accounts/{account_id}/campaigns?pageSize=50"
+    url = f"https://api.criteo.com/2024-01/retail-media/accounts/{account_id}/campaigns?pageSize=50"
 
     payload = {}
     headers = {
@@ -238,7 +238,7 @@ def request_report(endpoint: str, ids: list | str, report_type: str, start_date:
     if endpoint != 'line-items' and endpoint != 'campaigns':
         exit('invalid endpoint. Must be one of line-items or campaigns')
 
-    url = f"https://api.criteo.com/2023-07/retail-media/reports/{endpoint}"
+    url = f"https://api.criteo.com/2024-01/retail-media/reports/{endpoint}"
 
     if type(ids) is list:
         attributes = {"ids": ids}
@@ -307,7 +307,7 @@ def is_generated(report_id: str):
     :param report_id: report id
     :return:
     """
-    url = f"https://api.criteo.com/2023-07/retail-media/reports/{report_id}/status"
+    url = f"https://api.criteo.com/2024-01/retail-media/reports/{report_id}/status"
     headers = {
         'Accept': 'application/json',
         'Authorization': f'Bearer {env.get("criteo_access_token")}'
@@ -342,7 +342,7 @@ def download_report(report_id: str) -> pd.DataFrame():
     :param report_id: report id
     :return: dataframe of report
     """
-    url = f"https://api.criteo.com/2023-07/retail-media/reports/{report_id}/output"
+    url = f"https://api.criteo.com/2024-01/retail-media/reports/{report_id}/output"
     headers = {
         'Accept': 'application/octet-stream',
         'Authorization': f'Bearer {env.get("criteo_access_token")}'
